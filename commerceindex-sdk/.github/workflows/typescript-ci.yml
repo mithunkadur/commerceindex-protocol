@@ -1,0 +1,36 @@
+name: TypeScript SDK CI
+
+on:
+  push:
+    branches: [main]
+    paths: ['typescript/**']
+  pull_request:
+    branches: [main]
+    paths: ['typescript/**']
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['18', '20', '22']
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies
+        working-directory: typescript
+        run: npm install
+
+      - name: Build
+        working-directory: typescript
+        run: npm run build
+
+      - name: Test
+        working-directory: typescript
+        run: npm test
