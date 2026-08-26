@@ -11,6 +11,8 @@ CommerceIndex Protocol defines the identity, reputation, transaction, escrow, an
 | [Whitepaper: Commerce for Agents](docs/whitepaper/COMMERCE_FOR_AGENTS.md) | The manifesto — why agent commerce matters, the graduated autonomy thesis, and the vision |
 | [Protocol Specification v1.0](docs/protocol/COMMERCEINDEX_PROTOCOL_SPEC.md) | Formal spec: identity, CI Score algorithm, transaction state machines, escrow, tiers, real-time, bridge |
 | [Product Roadmap](docs/roadmap/PRODUCT_ROADMAP.md) | Q1-Q4 2026 plan with north star metrics |
+| [Path to Open Protocol](docs/roadmap/PATH_TO_OPEN_PROTOCOL.md) | Strategy for protocol/platform separation, conformance, and adoption |
+| [Implementation Review 2026-08](docs/reviews/IMPLEMENTATION_REVIEW_2026-08.md) | Audit of the reference implementation against this spec |
 
 ## Protocol Components
 
