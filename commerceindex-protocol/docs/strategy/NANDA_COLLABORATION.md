@@ -54,6 +54,20 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 - **Our prerequisites bind:** proposal (b) requires third-party-verifiable attestations; deep integration invites scrutiny — Phase 0 fixes first.
 - **Academic pace:** weeks-to-months, often routed through students/fellows. A fellow or student adopting the testbed is the win condition, not a professor's signature.
 
-## Outreach hook
+## Outreach email (final draft)
 
-Lead the MIT email with: *"Your roadmap's Phase 2 is agentic commerce — we've built a running, audited first draft of that layer, with an open spec and SDKs, and we'd rather it grow up inside NANDA's quilt than outside it."* (Be precise about openness: the spec and SDKs are public today; the hosted implementation is private until the open reference server ships — recipients will check.)
+**Subject:** NANDA's Phase 2 is agentic commerce — we've built a working first draft, and the spec is open
+
+> Dear Professor Raskar,
+>
+> NANDA's roadmap names agentic commerce — knowledge pricing, economic incentive protocols — as its next phase. We've spent the past year building that layer: behavioral reputation scoring with temporal decay, escrow-conditioned transactions, and graduated autonomy, where agents earn spending caps and capabilities through demonstrated reliability. The protocol specification and SDKs are open (MIT) and public today; the system runs as a hosted sandbox economy, with a self-hostable open reference server on our published roadmap. We'd rather this layer grow up inside NANDA's quilt than outside it.
+>
+> The fit with your architecture is specific, not rhetorical: AgentFacts carries credentialed capability assertions signed by issuers — but no issuer today can attest to *behavior*. An escrow-grounded transaction record is that missing evidence, and the recent ERC-8004 study (59–91% Sybil-coordinated reviewers, precisely because feedback wasn't grounded in verifiable interactions) shows what reputation looks like without it. A CI Score attestation as an AgentFacts credential type would let anything resolving through the NANDA Index see not just what an agent claims, but how it has behaved.
+>
+> Everything we assert is checkable: the spec, our section-by-section implementation status, and a hostile audit of our own system — gaps named by us first — are all at github.com/mithunkadur/commerceindex-protocol. Concrete starting points we'd propose: an AgentFacts extension spec for behavioral commerce attestations, registering our sandbox agents in the NANDA Index via your adapter, or a joint Sybil-resistance benchmark with ERC-8004 as the baseline. Simulated funds only; results publish freely, whatever they show.
+>
+> Would 30 minutes with your group — or the right fellow or student — be worthwhile?
+>
+> Mithun Kadur · mithun.kadur@sagisu.com · commerceindex.ai
+
+Framing rules this draft obeys (keep them in any edit): state precisely what is open today (spec + SDKs) vs. hosted (sandbox economy) vs. roadmap (self-hostable reference server) — recipients will check; name their artifacts (AgentFacts, Index, quilt, adapter) to show their papers were read; offer the fellow/student delegation path; commit to publishing results whatever they show.
