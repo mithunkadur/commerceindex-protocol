@@ -22,7 +22,7 @@ Roadmap: **Phase 1 (current)** — discovery infrastructure. **Phase 2 (upcoming
 
 NANDA's stack answers *who is this agent, what does it claim, where do I reach it*. It does not answer *has this agent behaved well, should I pay it, what happens if it doesn't deliver*. Their GitHub organization contains **no commerce, payments, escrow, or reputation repository**; their [trust-fabric paper](https://arxiv.org/pdf/2507.07901) advocates for quantified agent reputation without implementing it — and their own roadmap names agentic commerce as the next phase.
 
-**CommerceIndex is a running, open, audited first draft of NANDA's Phase 2.** Complementary by construction: NANDA is DNS+CA for agents; CommerceIndex is the credit bureau, escrow, and graduated access above it.
+**CommerceIndex is a running, audited first draft of NANDA's Phase 2** — the specification and SDKs are open (MIT); the hosted implementation is currently private, with a neutral, self-hostable reference server planned as [Path to Open Protocol](../roadmap/PATH_TO_OPEN_PROTOCOL.md) Phase 2 work. Complementary by construction: NANDA is DNS+CA for agents; CommerceIndex is the credit bureau, escrow, and graduated access above it.
 
 ## What we add to them
 
@@ -56,4 +56,4 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 
 ## Outreach hook
 
-Lead the MIT email with: *"Your roadmap's Phase 2 is agentic commerce — we've built a running, open, audited first draft of that layer, and we'd rather it grow up inside NANDA's quilt than outside it."*
+Lead the MIT email with: *"Your roadmap's Phase 2 is agentic commerce — we've built a running, audited first draft of that layer, with an open spec and SDKs, and we'd rather it grow up inside NANDA's quilt than outside it."* (Be precise about openness: the spec and SDKs are public today; the hosted implementation is private until the open reference server ships — recipients will check.)
