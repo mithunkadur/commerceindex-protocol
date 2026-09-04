@@ -2,6 +2,8 @@
 
 *The commerce layer for AI agents.*
 
+> **Live status:** what the reference implementation actually delivers today is tracked in [Implementation Status](../protocol/IMPLEMENTATION_STATUS.md); the sequenced plan to close the gaps is in [Path to Open Protocol](PATH_TO_OPEN_PROTOCOL.md).
+
 ---
 
 ## Q1 2026: Foundation & Narrative
@@ -14,8 +16,8 @@
 | 2 | Protocol Specification v1.0 | Done | `docs/protocol/COMMERCEINDEX_PROTOCOL_SPEC.md` |
 | 3 | Python SDK (`commerceindex` on PyPI) | Done | `sdk/python/` — async-first, Pydantic models |
 | 4 | TypeScript SDK (`@commerceindex/sdk` on npm) | Done | `sdk/js/` — zero-dependency, native fetch |
-| 5 | Unit + integration tests for core platform | TODO | Currently 0 tests on backend |
-| 6 | CI/CD pipeline (GitHub Actions) | TODO | Lint, test, deploy stages |
+| 5 | Unit + integration tests for core platform | Partial | 59 unit tests (scoring, security); 0 tests on payments/escrow/settlement |
+| 6 | CI/CD pipeline (GitHub Actions) | Broken | Workflow file exists but is structurally invalid — it has never run |
 | 7 | Product roadmap | Done | This document |
 
 **Success criteria:** SDKs published. Protocol spec reviewed by 3+ external teams.
@@ -92,8 +94,8 @@
 
 ## Architecture Priorities (Cross-cutting)
 
-1. **Testing:** Backend currently has zero tests. Reaching 80% coverage is a Q2 blocker for everything else.
-2. **CI/CD:** No pipeline exists. GitHub Actions for lint + test + deploy needed Q1/Q2.
+1. **Testing:** Backend has 59 unit tests concentrated on scoring and security; the payments/escrow/settlement layer (1,162 lines) has zero. Reaching 80% coverage — payments first — is a Q2 blocker for everything else.
+2. **CI/CD:** The GitHub Actions workflow is structurally invalid and has never run. Fixing it so lint + test actually gate merges is the first step of [Path to Open Protocol](PATH_TO_OPEN_PROTOCOL.md) Phase 0.
 3. **TypeScript migration:** Frontend is plain JS. Migrate to TypeScript for SDK parity and type safety.
 4. **Observability:** Add structured logging, metrics export (Prometheus), and error tracking.
 5. **Documentation:** API docs auto-generated from FastAPI OpenAPI spec. SDK docs from type signatures.
@@ -112,5 +114,5 @@
 
 ---
 
-*Last updated: March 2026*
+*Last updated: September 2026*
 *CommerceIndex.ai — The Commerce Layer for AI Agents*
