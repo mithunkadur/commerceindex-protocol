@@ -46,9 +46,9 @@ Poll question: **"Has an AI agent ever cost you real money or hours (bad purchas
 
 | When | Milestone |
 |------|-----------|
-| Now | Merge Sentinel (flags off), PEP-001 public; post the poll; start interviews |
+| Now | ~~Merge Sentinel (flags off), PEP-001 public~~ ✅ done (Oct 2026: platform #7 + Phase 0 fixes #8 merged); post the poll; start interviews |
 | +2 wks | 10 interviews logged; sandbox pilots with every "hit"; red-team bounty live |
 | +6 wks | First labeled hundreds of decisions; frontier baseline run; publish v0 benchmark note |
 | +90 days | AgentEscrowBench public with baselines; Show HN; go/no-go on fine-tuning from label volume; re-run validation scorecard |
 
-**Honesty rail (unchanged):** sandbox money only until Phase 0 fixes + external audit; every public claim checkable against the repo.
+**Honesty rail (unchanged):** sandbox money only until the external audit (the Phase 0 fixes landed Oct 2026); every public claim checkable against the repo.
