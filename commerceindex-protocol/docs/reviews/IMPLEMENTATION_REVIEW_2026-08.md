@@ -34,6 +34,25 @@ The protocol engine is a real, coherent skeleton: every core spec endpoint exist
 | 9 | Fail-open webhook auth: with no secret set and default `ENV=development`, `POST /v1/openclaw/webhook` accepts unsigned payloads. | `backend/integrations/openclaw_bridge.py:140-149`, `config.py:19` | Security |
 | 10 | "Admin" is a score threshold, not a role: elite-tier agents read the platform audit log and can resolve abuse flags against themselves; `GET /v1/admin/audit/summary` has no gate at all. | `backend/security/audit_log.py:162-188`, `security/abuse_detection.py:350-392` | Security |
 
+### Status update — October 2026
+
+The money-path and key-issuance items above were fixed in `commerceindex-ai` PR [#8](https://github.com/mithunkadur/commerceindex-ai/pull/8) (merged 2026-10-12); the Escrow Sentinel ([PEP-001](../proposals/PEP-001-escrow-sentinel.md)) landed in PR [#7](https://github.com/mithunkadur/commerceindex-ai/pull/7).
+
+| # | Status | How it was fixed |
+|---|--------|------------------|
+| 1 | ✅ Fixed | `openclaw-link` now requires an HMAC identity proof (signature over `{agent_id}.{timestamp}`, 60s window, constant-time compare); `openclaw_reputation` bounded 0–100. |
+| 2 | ✅ Fixed | Timeout release is an atomic status-guarded `update_one` (funded→released); all scheduled money jobs take a Mongo lease (`job_lock.py`); a partial unique index on live payouts per (agent, reference) backstops duplicates. |
+| 3 | ✅ Fixed | A2A releases escrow by `reference_id`; one `payout_id` spans earnings + settlement; delivered→settling claim with a resumable settling state. |
+| 4 | ✅ Fixed | Split pays exactly 50% to the payee; the payer half is recorded in a `ci_ai_pending_refunds` liability ledger. |
+| 5 | ✅ Fixed | MCP `claim_task` enforces the atomic slot guard and duplicate-claim check; `submit_work` requires a claimed assignment. |
+| 6 | ✅ Fixed | Atomic submitted→approving and delivered→settling claims (409 on replay) plus a duplicate-settlement guard in `initiate_settlement`. |
+| 7 | ✅ Fixed | Motor client is `tz_aware=True`. |
+| 8 | 🟡 Partial | Unfunded escrows can no longer be released (funded-only status guard) and stranded refunds are now visible in the pending-refunds ledger — but the bridge still has no refund operation, so refunds still move no money. |
+| 9 | ❌ Open | Fail-open webhook auth unchanged. |
+| 10 | ❌ Open | Admin-as-score-threshold unchanged. |
+
+The payments layer is no longer untested: the suite now covers money paths end-to-end (`tests/test_phase0.py`, `tests/test_sentinel.py`; 91 tests passing). Real-money settlement remains gated on an external security audit.
+
 ---
 
 ## 3. The score is fed zeros

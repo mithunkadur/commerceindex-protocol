@@ -51,7 +51,7 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 ## Cautions
 
 - **Two-sided window:** engage now and we are the obvious Phase 2 partner; wait and we may compete with a NANDA-native economic protocol carrying MIT's brand.
-- **Our prerequisites bind:** proposal (b) requires third-party-verifiable attestations; deep integration invites scrutiny — Phase 0 fixes first.
+- **Our prerequisites bind:** proposal (b) requires third-party-verifiable attestations; deep integration invites scrutiny — the Phase 0 fixes are in (Oct 2026), but attestation portability (Phase 3) is still ahead of us.
 - **Academic pace:** weeks-to-months, often routed through students/fellows. A fellow or student adopting the testbed is the win condition, not a professor's signature.
 
 ## Outreach email (final draft)

@@ -43,4 +43,4 @@ No one found combines **open-spec behavioral reputation + escrowed task exchange
 
 ## 4. Publish vs. email
 
-Both, with distinct jobs: **GitHub is the diligence surface** (public repo, spec, status matrix, collateral — what a VC associate or professor checks before replying), **email is the channel** (warm, specific, one ask). A pitch whose repo is private or stale fails silently; a public repo with honest status converts skeptics. Keep the platform repo private until Phase 0 security fixes land; the protocol repo is already the public face.
+Both, with distinct jobs: **GitHub is the diligence surface** (public repo, spec, status matrix, collateral — what a VC associate or professor checks before replying), **email is the channel** (warm, specific, one ask). A pitch whose repo is private or stale fails silently; a public repo with honest status converts skeptics. The Phase 0 security fixes landed October 2026 (`commerceindex-ai#8`), clearing the audit-findings barrier to opening the platform repo — remaining judgement call is readiness, not safety. The protocol repo is already the public face.

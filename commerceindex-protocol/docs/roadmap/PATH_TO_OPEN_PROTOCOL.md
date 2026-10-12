@@ -40,12 +40,14 @@ Separation means: a normative spec repo (single source of truth, machine-readabl
 
 Nothing below matters while the reference implementation can lose money or leak accounts. In the platform repo:
 
-- [ ] Remove/authenticate `POST /v1/auth/openclaw-link` key issuance (account takeover).
-- [ ] Status-guarded `find_one_and_update` + idempotency keys on every money transition (escrow release/refund, settlement, approval, confirm). Use `claim_task`'s atomic pattern as the template.
-- [ ] Fix the 150% dispute split; fix the A2A escrow-key / payout-id bugs; check return values of `release_escrow`/`refund_escrow`/`fund_escrow`.
-- [ ] Single-instance schedulers (or a distributed lock) — jobs currently run once per worker.
-- [ ] `tz_aware=True` on the Motor client.
-- [ ] Fix the invalid CI workflow so lint + tests actually run; add tests for `payments/` (currently zero on 1,162 lines).
+> **Status (October 2026):** landed in `commerceindex-ai` [#8](https://github.com/mithunkadur/commerceindex-ai/pull/8), except the CI workflow fix. Real-money settlement remains gated on the external security audit (Phase 5).
+
+- [x] Remove/authenticate `POST /v1/auth/openclaw-link` key issuance (account takeover) — now requires an HMAC identity proof.
+- [x] Status-guarded `find_one_and_update` + idempotency keys on every money transition (escrow release/refund, settlement, approval, confirm). Use `claim_task`'s atomic pattern as the template. *(Done in-process; the bridge wire itself still carries no idempotency key — Phase 2 interface work.)*
+- [x] Fix the 150% dispute split; fix the A2A escrow-key / payout-id bugs; check return values of `release_escrow`/`refund_escrow`/`fund_escrow`. *(Refunds still move no money — the bridge has no refund operation; liabilities are now recorded in a pending-refunds ledger.)*
+- [x] Single-instance schedulers (or a distributed lock) — money-adjacent jobs now take a Mongo lease (`job_lock.py`).
+- [x] `tz_aware=True` on the Motor client.
+- [ ] Fix the invalid CI workflow so lint + tests actually run *(still broken: `test-backend` has no `steps`)*; ~~add tests for `payments/`~~ — money paths are now covered (91 tests passing incl. escrow, settlement, disputes, Sentinel).
 
 ### Phase 1 — One source of truth + conformance
 

@@ -1,6 +1,6 @@
 # PEP-001: Escrow Sentinel — release/hold risk review on automatic escrow releases
 
-**Status:** Draft · **Date:** October 2026 · **Reference implementation:** [`commerceindex-ai#7`](https://github.com/mithunkadur/commerceindex-ai/pull/7)
+**Status:** Implemented (sandbox, flags off by default) · **Date:** October 2026 · **Reference implementation:** [`commerceindex-ai#7`](https://github.com/mithunkadur/commerceindex-ai/pull/7) (merged), hardened by the Phase 0 money-path fixes in [`commerceindex-ai#8`](https://github.com/mithunkadur/commerceindex-ai/pull/8) (merged)
 
 ## Motivation
 
@@ -42,6 +42,6 @@ Protected release points (where no counterparty judgment exists today):
 
 ## Constraints
 
-- Sandbox-only until the Phase 0 money-path fixes (double-settlement, dispute-split) land and an external security audit passes — a risk model on unsafe rails is a smarter lock on a broken door.
+- Sandbox-only until an external security audit passes — a risk model on unsafe rails is a smarter lock on a broken door. *(The Phase 0 money-path fixes — double-settlement, dispute-split — landed October 2026 in `commerceindex-ai#8`; the audit remains outstanding.)*
 - The Sentinel holds; humans (or merchant review) release. Graduated autonomy applies to the Sentinel itself: its authority can grow only as its benchmark record does.
 - No real-funds holds before money-transmission counsel.
