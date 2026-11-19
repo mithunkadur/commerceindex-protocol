@@ -1,6 +1,6 @@
 # Implementation Status
 
-**As of:** November 2026 (reflects `commerceindex-ai` PRs #7–#8, the payout fixes on branch `claude/payout-integrity-fixes`, and the read-only MCP connector on branch `claude/readonly-mcp-server`)
+**As of:** November 2026 (reflects `commerceindex-ai` PRs #7–#8, the payout fixes in PR #10, and the read-only MCP connector in PR #11)
 **Reference implementation:** the CommerceIndex platform (`commerceindex-ai` repository)
 **Source of findings:** [Implementation Review 2026-08](../reviews/IMPLEMENTATION_REVIEW_2026-08.md) (and its October and November 2026 follow-ups) — see it for file:line detail on every item below.
 
@@ -35,7 +35,7 @@ This document tracks how much of [Protocol Specification v1.0](COMMERCEINDEX_PRO
 | §8 Bridge protocol | 🔶 Divergent | HMAC signing is real and correctly constant-time — but header names differ (`X-CI-AI-*` vs. spec's `X-CI-*`), the implementation omits the spec's `sort_keys` canonicalization (spec-conformant signatures fail verification), and every documented bridge/ingest path differs from the deployed one. |
 | §9 Error codes | ✅ Implemented | Status codes and error format match. |
 | §10 Experiments | 🟡 Partial | CRUD, run reporting, evaluation, and adopt endpoints exist, as do the three tool-server operations. But `sandbox_mode`, `max_usdc_per_run`, and `time_window_minutes` are stored and never enforced, and `adopt` writes auto-rules to a location nothing reads. |
-| §10.8 MCP tools | 🔶 Divergent | The three experiment tools the spec lists are served by a REST endpoint pair with function-style schemas (`/v1/mcp/tools` and `/v1/mcp/call`). That endpoint does not speak the MCP wire protocol, so MCP clients cannot reach those tools. Separately, as of November 2026 the platform has a real MCP server at `POST /mcp` (branch `claude/readonly-mcp-server`): six read-only lookup tools and no sign-in. It is off by default and not yet deployed, and it is beyond the spec: it deliberately leaves out every tool that changes data or moves money, including the three in §10.8. |
+| §10.8 MCP tools | 🔶 Divergent | The three experiment tools the spec lists are served by a REST endpoint pair with function-style schemas (`/v1/mcp/tools` and `/v1/mcp/call`). That endpoint does not speak the MCP wire protocol, so MCP clients cannot reach those tools. Separately, as of November 2026 the platform has a real MCP server at `POST /mcp` (`commerceindex-ai` PR #11): six read-only lookup tools and no sign-in. It is off by default and not yet deployed, and it is beyond the spec: it deliberately leaves out every tool that changes data or moves money, including the three in §10.8. |
 
 ## Companion deliverables
 
@@ -46,7 +46,7 @@ This document tracks how much of [Protocol Specification v1.0](COMMERCEINDEX_PRO
 | Agent skill package | 🟡 Partial | A working HTTP client SDK with correct endpoint paths, but no tests, and it is not an MCP integration despite the positioning. |
 | Claude plugin ([`plugins/commerceindex`](../../../plugins/commerceindex)) | 🟡 Partial | A plugin bundle for Claude: a connector entry for the read-only MCP server and two skills (agent reputation, bounties), with a marketplace file at the repository root. It passes `claude plugin validate` and was run in Claude Code against a local copy of the server. **The hosted endpoint it points at is not switched on**, so an installed copy cannot connect yet. It has not been submitted to Anthropic's directory, which would need the endpoint live, a privacy policy URL and an icon. |
 | CI/CD for the platform | ❌ Not implemented | The workflow file is structurally invalid (a job with no steps) and has never run. |
-| Backend test coverage | 🟡 Partial | 144 tests passing on branch `claude/readonly-mcp-server` (108 before the connector), including regression tests for every payout failure reproduced in the November 2026 review. Line coverage overall is around half. The default run uses an in-memory database. The suite can now also be pointed at a real MongoDB 7 and passes there, which exercises the indexes, but nothing runs it that way automatically, and no test makes concurrent requests. |
+| Backend test coverage | 🟡 Partial | 144 tests passing (108 before the connector), including regression tests for every payout failure reproduced in the November 2026 review. Line coverage overall is around half. The default run uses an in-memory database. The suite can now also be pointed at a real MongoDB 7 and passes there, which exercises the indexes, but nothing runs it that way automatically, and no test makes concurrent requests. |
 
 ## Beyond the spec
 

@@ -42,7 +42,7 @@ Nothing below matters while the reference implementation can lose money or leak 
 
 > **Status (October 2026):** landed in `commerceindex-ai` [#8](https://github.com/mithunkadur/commerceindex-ai/pull/8), except the CI workflow fix. Real-money settlement remains gated on the external security audit (Phase 5).
 >
-> **Correction (November 2026):** Phase 0 was not complete. A follow-up review reproduced payouts from escrows that were never funded, several payouts from one escrow, and payouts lost on bridge failure — the October work made each step atomic but left payouts decoupled from funded escrow. Those are fixed in `commerceindex-ai` branch `claude/payout-integrity-fixes`; the authorization and deployment findings from the same review are still open. See the [review's November section](../reviews/IMPLEMENTATION_REVIEW_2026-08.md).
+> **Correction (November 2026):** Phase 0 was not complete. A follow-up review reproduced payouts from escrows that were never funded, several payouts from one escrow, and payouts lost on bridge failure — the October work made each step atomic but left payouts decoupled from funded escrow. Those are fixed in `commerceindex-ai` PR #10; the authorization and deployment findings from the same review are still open. See the [review's November section](../reviews/IMPLEMENTATION_REVIEW_2026-08.md).
 
 - [x] Remove/authenticate `POST /v1/auth/openclaw-link` key issuance (account takeover) — now requires an HMAC identity proof.
 - [x] Status-guarded `find_one_and_update` + idempotency keys on every money transition (escrow release/refund, settlement, approval, confirm). Use `claim_task`'s atomic pattern as the template. *(Completed November 2026: payouts now require a funded escrow transition, and the payout id is sent to the bridge as an idempotency key — the closed counterparty must honour it.)*
@@ -64,7 +64,7 @@ Nothing below matters while the reference implementation can lose money or leak 
 
 - [ ] Carve the ~6k-LOC protocol engine (registry, scoring, tasks, A2A, escrow ledger, gateway) into a neutral, self-hostable server. Success bar: `docker compose up` → a working local agent economy with **sandbox money** in five minutes. That demo is the single highest-leverage adoption asset.
 - [ ] Define **settlement as a protocol interface** with adapters: `mock/sandbox` (ships first), `stripe`, and a stablecoin rail (e.g. x402 / USDC on an L2) later. The private `.com` bridge becomes just one adapter behind the documented interface.
-- [ ] Clean dependency manifest (the current `requirements.txt` is a scaffold-container freeze), real MCP server (a read-only one now exists on the platform branch `claude/readonly-mcp-server`, off by default; the tools that act for an agent are still REST, not MCP), and multi-worker-safe gateway (Redis pub/sub) — or documented single-worker mode.
+- [ ] Clean dependency manifest (the current `requirements.txt` is a scaffold-container freeze), real MCP server (a read-only one now exists, added in `commerceindex-ai` PR #11 and off by default; the tools that act for an agent are still REST, not MCP), and multi-worker-safe gateway (Redis pub/sub) — or documented single-worker mode.
 
 ### Phase 3 — Portable trust for real
 
@@ -74,7 +74,7 @@ Nothing below matters while the reference implementation can lose money or leak 
 
 ### Phase 4 — Distribution: go where agents already are
 
-- [ ] A real MCP server, published where agent developers look for tools. *Started November 2026:* a read-only MCP server (six lookup tools, no sign-in) is built on the platform branch `claude/readonly-mcp-server`, and a Claude plugin that points at it is in [`plugins/commerceindex`](../../../plugins/commerceindex). *Not done:* the server is not deployed and nothing is listed in any catalog. Anthropic's directory policy excludes software that transfers money or executes financial transactions autonomously, and says it does not generally allow cryptocurrency software, so a listing there could only ever be the read-only surface and is not assured even for that.
+- [ ] A real MCP server, published where agent developers look for tools. *Started November 2026:* a read-only MCP server (six lookup tools, no sign-in) is merged into the platform (`commerceindex-ai` PR #11), and a Claude plugin that points at it is in [`plugins/commerceindex`](../../../plugins/commerceindex). *Not done:* the server is not deployed and nothing is listed in any catalog. Anthropic's directory policy excludes software that transfers money or executes financial transactions autonomously, and says it does not generally allow cryptocurrency software, so a listing there could only ever be the read-only surface and is not assured even for that.
 - [ ] **Integrate, don't fight, the incumbent rails**: position against Google AP2, OpenAI/Stripe ACP, Coinbase x402, and ERC-8004 explicitly in the whitepaper. The defensible layer here is reputation + escrow + graduated autonomy — payments rails are being commoditized by much larger players. Concrete integration: a CI Score attestation consumable inside an AP2/ACP checkout flow; x402 as a settlement adapter.
 - [ ] Publish the agent skill to the registries agents actually use; keep SDK quickstarts at "reputation in 10 lines."
 

@@ -75,7 +75,7 @@ A second review of the merged October code confirmed that each of the seven fixe
 | No ledger | Money state is mutable status fields across several collections, in floats, with no double-entry journal and no reconciliation job. | ❌ Open |
 | Deployment | An uninstallable dependency, production compose overrides that do not take effect, an API key committed under `test_reports/`, development mode as the shipped default. | ❌ Open |
 
-How the fixed items were fixed (`commerceindex-ai` branch `claude/payout-integrity-fixes`):
+How the fixed items were fixed (`commerceindex-ai` PR #10):
 
 - An escrow is released only from the funded state, and a flow settles only if its own call made that transition. Multi-agent tasks draw down the escrow one slot at a time, so a task can never pay more than was funded.
 - There is one payout record per obligation. A missing wallet, a daily-cap deferral or an ambiguous bridge failure is retried on that same record under the same payout id, which is also sent to the bridge as an idempotency key. A second payout for the same agent and reference is refused whichever flow asks.
@@ -131,7 +131,7 @@ Additional truth-in-documentation issue: `GET /v1/developer/api-reference` (`api
 - **Billing (broken three independent ways)**: the frontend never sends `agent_id` (`PricingPage.js:89-93`) so upgrades are never provisioned; even provisioned, the 10-minute score recompute overwrites tier/badge (`agent_scoring.py:509-514` vs `stripe_billing.py:161`); and the privilege model has no paid-tier concept at all. Payments run through `emergentintegrations==0.1.0` (scaffolding-vendor SDK) while the pinned official `stripe` package is never imported. The Stripe webhook swallows all errors incl. signature failure and returns 200 (`stripe_webhook.py:71-75`).
 - **CI has never run**: `.github/workflows/ci.yml` is two workflow files merged; job `test-backend` has no `steps:` key, so GitHub rejects the entire file. Duplicate lint/test jobs with conflicting Python/Node versions and package managers; `|| true` on lint and security scans.
 - **Real-time gateway under multi-worker**: WS state is process-local with no Redis pub/sub; with `--workers 2`, broadcasts reach ~half the clients (`gateway/connection_manager.py`).
-- **Not MCP**: `backend/mcp/mcp_server.py` is REST with function-call-style schemas; `commerceindex-skill` is a plain HTTP SDK. Neither speaks the MCP wire protocol. *(November 2026: on branch `claude/readonly-mcp-server` that module is renamed `agent_tools/rest_tools.py`, and a separate read-only MCP server is added at `POST /mcp`. The tools that act for an agent are still REST.)*
+- **Not MCP**: `backend/mcp/mcp_server.py` is REST with function-call-style schemas; `commerceindex-skill` is a plain HTTP SDK. Neither speaks the MCP wire protocol. *(November 2026: in `commerceindex-ai` PR #11 that module is renamed `agent_tools/rest_tools.py`, and a separate read-only MCP server is added at `POST /mcp`. The tools that act for an agent are still REST.)*
 
 ---
 
