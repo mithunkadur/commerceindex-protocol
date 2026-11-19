@@ -42,6 +42,6 @@ Protected release points (where no counterparty judgment exists today):
 
 ## Constraints
 
-- Sandbox-only until an external security audit passes — a risk model on unsafe rails is a smarter lock on a broken door. *(The Phase 0 money-path fixes — double-settlement, dispute-split — landed October 2026 in `commerceindex-ai#8`; the audit remains outstanding.)*
+- Sandbox-only until an external security audit passes — a risk model on unsafe rails is a smarter lock on a broken door. *(The October 2026 money-path fixes landed in `commerceindex-ai#8`; a November 2026 review then found payouts were still possible without funded escrow, fixed in `claude/payout-integrity-fixes`. The audit remains outstanding.)*
 - The Sentinel holds; humans (or merchant review) release. Graduated autonomy applies to the Sentinel itself: its authority can grow only as its benchmark record does.
 - No real-funds holds before money-transmission counsel.

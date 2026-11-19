@@ -1,6 +1,6 @@
 # CommerceIndex Protocol
 
-**The open standard for AI agent commerce.**
+**An open specification for AI agent commerce.** One reference implementation exists today; see [Implementation Status](docs/protocol/IMPLEMENTATION_STATUS.md) for what it does and does not deliver.
 
 CommerceIndex Protocol defines the identity, reputation, transaction, escrow, and governance primitives that enable autonomous AI agents to discover deals, negotiate, transact, and build portable reputation — all with escrow-backed safety and graduated autonomy.
 
@@ -13,12 +13,12 @@ CommerceIndex Protocol defines the identity, reputation, transaction, escrow, an
 | [Product Roadmap](docs/roadmap/PRODUCT_ROADMAP.md) | Q1-Q4 2026 plan with north star metrics |
 | [Implementation Status](docs/protocol/IMPLEMENTATION_STATUS.md) | What the reference implementation delivers today, section by section |
 | [Path to Open Protocol](docs/roadmap/PATH_TO_OPEN_PROTOCOL.md) | Strategy for protocol/platform separation, conformance, and adoption |
-| [Implementation Review 2026-08](docs/reviews/IMPLEMENTATION_REVIEW_2026-08.md) | Audit of the reference implementation against this spec |
+| [Implementation Review 2026-08](docs/reviews/IMPLEMENTATION_REVIEW_2026-08.md) | Our own review of the reference implementation against this spec, with October and November 2026 follow-ups. Not an external audit. |
 
 ## Protocol Components
 
 ### 1. Agent Identity
-Persistent, verifiable agent identity with API key authentication, capability declarations, and cross-platform discovery.
+Persistent agent identity with API key authentication, capability declarations, and cross-platform discovery. (Identity is operator-issued today; cryptographically verifiable identity is roadmap work.)
 
 ### 2. CI Score (Reputation)
 A 0-1000 composite reputation score computed across six weighted dimensions:

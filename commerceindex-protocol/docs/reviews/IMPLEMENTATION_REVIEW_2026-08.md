@@ -47,11 +47,45 @@ The money-path and key-issuance items above were fixed in `commerceindex-ai` PR 
 | 5 | ✅ Fixed | MCP `claim_task` enforces the atomic slot guard and duplicate-claim check; `submit_work` requires a claimed assignment. |
 | 6 | ✅ Fixed | Atomic submitted→approving and delivered→settling claims (409 on replay) plus a duplicate-settlement guard in `initiate_settlement`. |
 | 7 | ✅ Fixed | Motor client is `tz_aware=True`. |
-| 8 | 🟡 Partial | Unfunded escrows can no longer be released (funded-only status guard) and stranded refunds are now visible in the pending-refunds ledger — but the bridge still has no refund operation, so refunds still move no money. |
+| 8 | 🟡 Partial | Split-dispute refunds are recorded in a pending-refunds ledger — but the bridge still has no refund operation, so refunds still move no money. *(Correction: this row originally also said unfunded escrows could no longer be released. That was wrong — only the timeout path was guarded. See the November follow-up below.)* |
 | 9 | ❌ Open | Fail-open webhook auth unchanged. |
 | 10 | ❌ Open | Admin-as-score-threshold unchanged. |
 
 The payments layer is no longer untested: the suite now covers money paths end-to-end (`tests/test_phase0.py`, `tests/test_sentinel.py`; 91 tests passing). Real-money settlement remains gated on an external security audit.
+
+### Follow-up review — November 2026
+
+A second review of the merged October code confirmed that each of the seven fixes closes the bug it targeted, and then showed the design around them was still unsound: **payouts were not conditioned on a funded escrow actually being released.** The findings below were reproduced by running them against the application, not inferred from reading.
+
+| Finding | What was reproduced | Status |
+|---------|--------------------|--------|
+| Payout without funds | Two free accounts completed an agent-to-agent deal and triggered a $3,980 settlement call from an escrow that was never funded; one agent dealing with itself triggered $497.50. `release_escrow` accepted unfunded escrows and callers ignored its result. | ✅ Fixed |
+| One escrow, several payouts | A $100 escrow on a three-agent task produced three $90 payouts. | ✅ Fixed |
+| Expired or refunded tasks still pay | After the deadline job refunded the escrow, a late submission was still paid. | ✅ Fixed |
+| Settlement callback had no state machine | A `failed` callback after `completed` reopened the payout for a second settlement. | ✅ Fixed |
+| Bridge failure strands money | On a bridge timeout the escrow showed released, the payout failed, the task approved; nothing retried, and a timeout was treated as a definite failure although the counterparty may have paid. | ✅ Fixed |
+| Deferred settlements pay gross | A payout deferred for the daily cap later paid $150 instead of the $135 net, with no earnings row. | ✅ Fixed |
+| Timeout release ignores delivery | An agent-to-agent escrow auto-released to a seller who had delivered nothing, at the gross amount. | ✅ Fixed |
+| Review replays | A rejection after an approve-and-pay was accepted and drove the slot count negative; one rejection refunded the whole escrow while reopening the task. | ✅ Fixed |
+| Session and escrow reads open to non-parties | An unrelated agent read another deal's delivered data. | ❌ Open |
+| Suspension and key scopes not enforced | A suspended agent's key still works; a read-only key can settle. | ❌ Open |
+| One HMAC secret across trust domains | The same secret signs the bridge, identity linking, ingest money operations and score attestations; no nonce, no method or path binding. | ❌ Open |
+| Zero-cost registration | The registration limiter trusts a client-supplied header and is per-process. | ❌ Open |
+| The score does not gate anything | A new agent scores 305 (second tier) after the first recompute; the top two tiers are unreachable; a self-graded task raises the score; rejections and disputes never lower it. | ❌ Open |
+| No ledger | Money state is mutable status fields across several collections, in floats, with no double-entry journal and no reconciliation job. | ❌ Open |
+| Deployment | An uninstallable dependency, production compose overrides that do not take effect, an API key committed under `test_reports/`, development mode as the shipped default. | ❌ Open |
+
+How the fixed items were fixed (`commerceindex-ai` branch `claude/payout-integrity-fixes`):
+
+- An escrow is released only from the funded state, and a flow settles only if its own call made that transition. Multi-agent tasks draw down the escrow one slot at a time, so a task can never pay more than was funded.
+- There is one payout record per obligation. A missing wallet, a daily-cap deferral or an ambiguous bridge failure is retried on that same record under the same payout id, which is also sent to the bridge as an idempotency key. A second payout for the same agent and reference is refused whichever flow asks.
+- The settlement callback accepts only `completed` or `failed`, and `completed` is terminal.
+- Every refund of funded money is written to the pending-refunds ledger. The bridge still cannot move refunds.
+- Closed tasks take no submissions; an agent cannot open a deal with itself or accept its own offer; funding must match the escrow's payer and amount.
+
+Seventeen regression tests reproduce these cases (108 tests passing). A consequence worth stating plainly: agent-to-agent deals and agent-created bounties have no funding path of their own, so they cannot settle until their escrow is funded through the bridge. Before these fixes they settled from nothing.
+
+This remains our own review. No external party has audited the system.
 
 ---
 

@@ -4,8 +4,10 @@ Python SDK for the [CommerceIndex.ai](https://commerceindex.ai) agent commerce p
 
 ## Install
 
+> Not yet published to PyPI — install from this repository for now.
+
 ```bash
-pip install commerceindex
+pip install "git+https://github.com/mithunkadur/commerceindex-protocol.git#subdirectory=commerceindex-sdk/python"
 ```
 
 ## Quick Start

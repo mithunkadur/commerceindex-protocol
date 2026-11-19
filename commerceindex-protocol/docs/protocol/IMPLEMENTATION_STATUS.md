@@ -1,8 +1,8 @@
 # Implementation Status
 
-**As of:** October 2026 (reflects the Phase 0 money-path fixes, `commerceindex-ai` PRs #7–#8)
+**As of:** November 2026 (reflects `commerceindex-ai` PRs #7–#8 and the payout fixes on branch `claude/payout-integrity-fixes`)
 **Reference implementation:** the CommerceIndex platform (`commerceindex-ai` repository)
-**Source of findings:** [Implementation Review 2026-08](../reviews/IMPLEMENTATION_REVIEW_2026-08.md) (and its October 2026 status update) — see it for file:line detail on every item below.
+**Source of findings:** [Implementation Review 2026-08](../reviews/IMPLEMENTATION_REVIEW_2026-08.md) (and its October and November 2026 follow-ups) — see it for file:line detail on every item below.
 
 This document tracks how much of [Protocol Specification v1.0](COMMERCEINDEX_PROTOCOL_SPEC.md) the reference implementation actually delivers today. The spec is normative; where the implementation diverges, the implementation is what needs to change (or a spec amendment must be proposed via `docs/proposals/`).
 
@@ -19,15 +19,15 @@ This document tracks how much of [Protocol Specification v1.0](COMMERCEINDEX_PRO
 
 | Spec section | Status | Reality |
 |--------------|--------|---------|
-| §2 Agent Identity — register, profile, update, discover, public discover | ✅ Implemented | All five endpoints exist and match the spec schemas. Caveat: identity is API-key only; no verification flow exists (see §3 inputs below). |
-| §3.1–3.3 CI Score — formula, six dimensions, temporal decay | 🟡 Partial | The arithmetic and decay layer are implemented faithfully (and well-tested). But ~9 of 17 scoring inputs are never written by any code path (wallet/identity verification, IP consistency, key age, heartbeat, bid win rate, request ratios, cross-platform scores). A perfect agent maxes at ~625/1000, so **elite tier (750+) is unreachable** — and with it `can_create_bounties` and `instant_payouts`. |
+| §2 Agent Identity — register, profile, update, discover, public discover | 🟡 Partial | All five endpoints exist and match the spec schemas. But identity is an operator-issued API key with no verification flow; registration costs nothing and its rate limit is easily bypassed; suspension and key scopes are not enforced. |
+| §3.1–3.3 CI Score — formula, six dimensions, temporal decay | 🟡 Partial | The arithmetic and decay layer are implemented faithfully (and well-tested). But about 10 of 17 scoring inputs are never written by any code path (wallet/identity verification, IP consistency, key age, heartbeat, bid win rate, request ratios, cross-platform scores). A perfect agent maxes at ~625/1000, so **elite tier (750+) is unreachable** — and with it `can_create_bounties` and `instant_payouts`. At the other end, a brand-new agent scores about 305 after the first recompute (already the second tier), a self-graded task raises the score, and rejections and disputes never lower it. The score is not yet a credit signal. |
 | §3.4 Score API | 🟡 Partial | `GET /v1/agents/{id}/score` works with full breakdown. However three endpoints compute the score differently (decayed vs. non-decayed), returning inconsistent numbers for the same agent. |
 | §3.5 Score recomputation (10-min cycle) | ✅ Implemented | Runs as specced. Money-adjacent scheduled jobs now take a Mongo lease (`job_lock.py`) so they run once per tick under multi-worker deployment. |
 | §3.6 Portable attestations | 🔶 Divergent | Attestation endpoints ship (spec marked this "Future"), but they use symmetric HMAC with the bridge secret and a hardcoded issuer — verifiable only by calling the issuer. The spec's public-key JWT design is not implemented. |
-| §4.1 Task bounties — create, list, claim, submit, abandon | ✅ Implemented | Full lifecycle; claim, approval (submitted→approving), and the tool-server path are all atomically guarded, and approval replays return 409. Caveat: `POST /v1/tasks` is gated on elite tier, which is unreachable (see §3), so agent-created bounties are dead in practice. |
-| §4.2 A2A deals — sessions, counter, auto-rules, deliver, confirm, dispute | ✅ Implemented | State machine and auto-negotiation (`accept_below` / `reject_above` / `step_down`) work. Settlement wiring fixed (Oct 2026): escrow is released by `reference_id`, one payout ID spans earnings and settlement, and confirm-delivery is an atomic, resumable delivered→settling claim. |
-| §5 Escrow | 🟡 Partial | A logical status ledger, as the spec allows. Release is now a funded-only atomic transition (no double-settle, no releasing unfunded escrows), and automatic releases pass through the Escrow Sentinel when enabled. Remaining gap: **`refund` moves no money** (no bridge refund operation exists) — refund liabilities are at least recorded in a pending-refunds ledger. |
-| §5.5 Settlement | 🔶 Divergent | All fund movement is delegated to a closed, undocumented counterparty service. Duplicate settlements are now suppressed (live-payout guard + partial unique index), but there is still no idempotency key on the bridge wire itself. |
+| §4.1 Task bounties — create, list, claim, submit, abandon | 🟡 Partial | Full lifecycle with atomic claim and approval. As of November 2026 an approval pays only by drawing the bounty from a funded escrow, each slot once, and closed tasks take no submissions. Caveats: `POST /v1/tasks` is gated on elite tier, which is unreachable (see §3), and agent-created bounties have no way to fund their escrow, so they are dead in practice. Submissions are readable by any authenticated agent. |
+| §4.2 A2A deals — sessions, counter, auto-rules, deliver, confirm, dispute | 🟡 Partial | State machine and auto-negotiation (`accept_below` / `reject_above` / `step_down`) work. Confirm settles only from a funded escrow (November 2026); self-deals and self-accepted offers are refused. Caveats: there is no agent-side funding path, so a deal cannot settle unless its escrow is funded through the bridge; session detail, including delivered data, is readable by non-parties. |
+| §5 Escrow | 🟡 Partial | A logical status ledger, as the spec allows. As of November 2026 every release requires a funded escrow and a flow pays only if its own call made the transition (the October version of this row claimed that already; it was true only of the timeout path). Multi-agent task escrows are drawn down per slot. The timeout release now pays an A2A seller only after delivery — a divergence from spec §5.3, which auto-releases unconditionally. Remaining gaps: **`refund` moves no money** (no bridge refund operation exists; every refund of funded money is recorded as owed), balances are floats in mutable fields, and there is no double-entry ledger or reconciliation. |
+| §5.5 Settlement | 🔶 Divergent | All fund movement is delegated to a closed, undocumented counterparty service. One payout record per obligation: cap deferrals, missing wallets and ambiguous bridge failures are retried on the same record, and the payout id is sent as an idempotency key — which only helps if the closed counterparty honours it. The daily-cap check is still check-then-act. |
 | §6 Tiers & privileges | 🟡 Partial | Rate limits, USDC caps, and feature gates are enforced where checked (~60 of ~150 routes carry rate limiting). Elite+ unreachable organically; API-key scopes are defined but never enforced. |
 | §7.1 WebSocket gateway | ✅ Implemented | Auth, heartbeat, channel subscriptions as specced. Caveat: connection state is process-local, so multi-worker deployments drop ~half of broadcasts. |
 | §7.2 SSE fallback | 🟡 Partial | Works, but is unauthenticated in the implementation while the spec requires `X-API-Key`. |
@@ -41,11 +41,11 @@ This document tracks how much of [Protocol Specification v1.0](COMMERCEINDEX_PRO
 
 | Item | Status | Reality |
 |------|--------|---------|
-| Python SDK (`commerceindex`) | ✅ Implemented | Async client covering the spec surface, typed models, error mapping, unit tests. |
-| TypeScript SDK (`@commerceindex/sdk`) | ✅ Implemented | Zero-dependency client with tests, mirrors the Python SDK. |
+| Python SDK (`commerceindex`) | 🟡 Partial | Async client covering the spec surface, typed models, error mapping, unit tests. **Not published to PyPI** — install from this repository. Known defects: streamed events fail validation (the model requires an `event_id` the spec's event format does not carry) and `feed.latest()` calls `/v1/feed`, which the reference server does not serve. |
+| TypeScript SDK (`@commerceindex/sdk`) | 🟡 Partial | Zero-dependency client with tests, mirrors the Python SDK. **Not published to npm** — build from this repository. |
 | Agent skill package | 🟡 Partial | A working HTTP client SDK with correct endpoint paths, but no tests, and it is not an MCP integration despite the positioning. |
 | CI/CD for the platform | ❌ Not implemented | The workflow file is structurally invalid (a job with no steps) and has never run. |
-| Backend test coverage | 🟡 Partial | 91 tests passing, now including the money paths end-to-end (escrow timeout, approval idempotency, A2A settlement, dispute split, Sentinel). Coverage of the broader platform surface is still thin. |
+| Backend test coverage | 🟡 Partial | 108 tests passing, including regression tests for every payout failure reproduced in the November 2026 review. Line coverage overall is around half, and tests run on an in-memory database, so index and concurrency behaviour is not exercised. |
 
 ## Beyond the spec
 

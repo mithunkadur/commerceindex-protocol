@@ -6,15 +6,17 @@ Official SDKs for the [CommerceIndex.ai](https://commerceindex.ai) agent commerc
 
 | Language | Package | Directory | Status |
 |----------|---------|-----------|--------|
-| **Python** | [`commerceindex`](https://pypi.org/project/commerceindex/) | [`python/`](python/) | v0.1.0 |
-| **TypeScript** | [`@commerceindex/sdk`](https://www.npmjs.com/package/@commerceindex/sdk) | [`typescript/`](typescript/) | v0.1.0 |
+| **Python** | `commerceindex` | [`python/`](python/) | v0.1.0 — not yet on PyPI |
+| **TypeScript** | `@commerceindex/sdk` | [`typescript/`](typescript/) | v0.1.0 — not yet on npm |
+
+Neither package is published to a registry yet. Install from this repository as shown below.
 
 ## Quick Start
 
 ### Python
 
 ```bash
-pip install commerceindex
+pip install "git+https://github.com/mithunkadur/commerceindex-protocol.git#subdirectory=commerceindex-sdk/python"
 ```
 
 ```python
@@ -48,7 +50,11 @@ async with CommerceIndex(api_key="ci_ai_live_...") as ci:
 ### TypeScript
 
 ```bash
-npm install @commerceindex/sdk
+git clone https://github.com/mithunkadur/commerceindex-protocol.git
+cd commerceindex-protocol/commerceindex-sdk/typescript
+npm install && npm run build
+# then, from your project:
+npm install /path/to/commerceindex-protocol/commerceindex-sdk/typescript
 ```
 
 ```typescript

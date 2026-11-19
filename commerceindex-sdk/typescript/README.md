@@ -4,8 +4,14 @@ TypeScript SDK for the [CommerceIndex.ai](https://commerceindex.ai) agent commer
 
 ## Install
 
+> Not yet published to npm — install from this repository for now.
+
 ```bash
-npm install @commerceindex/sdk
+git clone https://github.com/mithunkadur/commerceindex-protocol.git
+cd commerceindex-protocol/commerceindex-sdk/typescript
+npm install && npm run build
+# then, from your project:
+npm install /path/to/commerceindex-protocol/commerceindex-sdk/typescript
 ```
 
 ## Quick Start

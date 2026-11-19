@@ -22,11 +22,11 @@ Roadmap: **Phase 1 (current)** — discovery infrastructure. **Phase 2 (upcoming
 
 NANDA's stack answers *who is this agent, what does it claim, where do I reach it*. It does not answer *has this agent behaved well, should I pay it, what happens if it doesn't deliver*. Their GitHub organization contains **no commerce, payments, escrow, or reputation repository**; their [trust-fabric paper](https://arxiv.org/pdf/2507.07901) advocates for quantified agent reputation without implementing it — and their own roadmap names agentic commerce as the next phase.
 
-**CommerceIndex is a running, audited first draft of NANDA's Phase 2** — the specification and SDKs are open (MIT); the hosted implementation is currently private, with a neutral, self-hostable reference server planned as [Path to Open Protocol](../roadmap/PATH_TO_OPEN_PROTOCOL.md) Phase 2 work. Complementary by construction: NANDA is DNS+CA for agents; CommerceIndex is the credit bureau, escrow, and graduated access above it.
+**CommerceIndex is a running, self-reviewed first draft of NANDA's Phase 2** — the specification and SDKs are open (MIT); the hosted implementation is currently private, with a neutral, self-hostable reference server planned as [Path to Open Protocol](../roadmap/PATH_TO_OPEN_PROTOCOL.md) Phase 2 work. Complementary by construction: NANDA is DNS+CA for agents; CommerceIndex is the credit bureau, escrow, and graduated access above it.
 
 ## What we add to them
 
-1. A working head start on Phase 2 (spec, state machines, SDKs, scoring with temporal decay, sandbox economy — plus a published audit, which matches academic epistemic norms).
+1. A working head start on Phase 2 (spec, state machines, SDKs, scoring with temporal decay, sandbox economy — plus a published critical review of our own implementation, which matches academic epistemic norms; no external audit has been done).
 2. **Behavioral ground truth for AgentFacts.** Credentials can carry claims; escrow-conditioned transaction records are the *verifiable interaction* evidence reputation needs — the exact ingredient whose absence let ERC-8004's registry be Sybil-gamed ([empirical study](https://arxiv.org/abs/2606.26028): 59–91% coordinated reviewers).
 3. An enforcement story for their attestation choke point: graduated autonomy tiers as Zero-Trust *graduation* (pairs with their ZTAA enterprise work).
 4. A live experiment substrate: NANDA Town simulates agent societies; our sandbox adds money, negotiation, escrow, and disputes.
@@ -36,7 +36,7 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 1. **CI Score attestations as an AgentFacts credential assertion** — resolve an agent through the NANDA Index and get its behavioral trust score with its facts. Makes their index answer the question every consumer will ask; makes our score discoverable across their quilt.
 2. **Escrow-grounded, decaying reputation evidence** — a publishable answer to the Sybil failure mode, with ERC-8004 as the baseline.
 3. **Graduated autonomy as control architecture** — the safety story their civic and enterprise tracks need.
-4. **The transparency posture** — a collaborator that publishes its own hostile audit is a safe bet for an academic brand.
+4. **The transparency posture** — a collaborator that publishes a hostile review of its own system is a safe bet for an academic brand.
 
 ## Collaboration proposals (ranked by effort)
 
@@ -51,7 +51,7 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 ## Cautions
 
 - **Two-sided window:** engage now and we are the obvious Phase 2 partner; wait and we may compete with a NANDA-native economic protocol carrying MIT's brand.
-- **Our prerequisites bind:** proposal (b) requires third-party-verifiable attestations; deep integration invites scrutiny — the Phase 0 fixes are in (Oct 2026), but attestation portability (Phase 3) is still ahead of us.
+- **Our prerequisites bind:** proposal (b) requires third-party-verifiable attestations; deep integration invites scrutiny — the October 2026 fixes and the November 2026 payout fixes are in, but an authorization review, an external audit and attestation portability (Phase 3) are still ahead of us.
 - **Academic pace:** weeks-to-months, often routed through students/fellows. A fellow or student adopting the testbed is the win condition, not a professor's signature.
 
 ## Outreach email (final draft)
@@ -64,7 +64,7 @@ NANDA's stack answers *who is this agent, what does it claim, where do I reach i
 >
 > The fit with your architecture is specific, not rhetorical: AgentFacts carries credentialed capability assertions signed by issuers — but no issuer today can attest to *behavior*. An escrow-grounded transaction record is that missing evidence, and the recent ERC-8004 study (59–91% Sybil-coordinated reviewers, precisely because feedback wasn't grounded in verifiable interactions) shows what reputation looks like without it. A CI Score attestation as an AgentFacts credential type would let anything resolving through the NANDA Index see not just what an agent claims, but how it has behaved.
 >
-> Everything we assert is checkable: the spec, our section-by-section implementation status, and a hostile audit of our own system — gaps named by us first — are all at github.com/mithunkadur/commerceindex-protocol. Concrete starting points we'd propose: an AgentFacts extension spec for behavioral commerce attestations, registering our sandbox agents in the NANDA Index via your adapter, or a joint Sybil-resistance benchmark with ERC-8004 as the baseline. Simulated funds only; results publish freely, whatever they show.
+> Everything we assert is checkable: the spec, our section-by-section implementation status, and our own critical review of the system — gaps named by us first, no external audit yet — are all at github.com/mithunkadur/commerceindex-protocol. Concrete starting points we'd propose: an AgentFacts extension spec for behavioral commerce attestations, registering our sandbox agents in the NANDA Index via your adapter, or a joint Sybil-resistance benchmark with ERC-8004 as the baseline. Simulated funds only; results publish freely, whatever they show.
 >
 > Would 30 minutes with your group — or the right fellow or student — be worthwhile?
 >
