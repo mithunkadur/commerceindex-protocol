@@ -51,4 +51,4 @@ Poll question: **"Has an AI agent ever cost you real money or hours (bad purchas
 | +6 wks | First labeled hundreds of decisions; frontier baseline run; publish v0 benchmark note |
 | +90 days | AgentEscrowBench public with baselines; Show HN; go/no-go on fine-tuning from label volume; re-run validation scorecard |
 
-**Honesty rail (unchanged):** sandbox money only until the external audit (the Phase 0 fixes landed Oct 2026); every public claim checkable against the repo.
+**Honesty rail (unchanged):** sandbox money only until the external audit; every public claim checkable against the repo. (The October 2026 fixes were followed by a November 2026 review that found and fixed further payout holes — see the implementation review.)

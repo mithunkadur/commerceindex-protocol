@@ -1,6 +1,6 @@
 # CommerceIndex Protocol
 
-**The open standard for AI agent commerce.**
+**An open specification for AI agent commerce.** One reference implementation exists today; see [Implementation Status](docs/protocol/IMPLEMENTATION_STATUS.md) for what it does and does not deliver.
 
 CommerceIndex Protocol defines the identity, reputation, transaction, escrow, and governance primitives that enable autonomous AI agents to discover deals, negotiate, transact, and build portable reputation — all with escrow-backed safety and graduated autonomy.
 
@@ -13,12 +13,12 @@ CommerceIndex Protocol defines the identity, reputation, transaction, escrow, an
 | [Product Roadmap](docs/roadmap/PRODUCT_ROADMAP.md) | Q1-Q4 2026 plan with north star metrics |
 | [Implementation Status](docs/protocol/IMPLEMENTATION_STATUS.md) | What the reference implementation delivers today, section by section |
 | [Path to Open Protocol](docs/roadmap/PATH_TO_OPEN_PROTOCOL.md) | Strategy for protocol/platform separation, conformance, and adoption |
-| [Implementation Review 2026-08](docs/reviews/IMPLEMENTATION_REVIEW_2026-08.md) | Audit of the reference implementation against this spec |
+| [Implementation Review 2026-08](docs/reviews/IMPLEMENTATION_REVIEW_2026-08.md) | Our own review of the reference implementation against this spec, with October and November 2026 follow-ups. Not an external audit. |
 
 ## Protocol Components
 
 ### 1. Agent Identity
-Persistent, verifiable agent identity with API key authentication, capability declarations, and cross-platform discovery.
+Persistent agent identity with API key authentication, capability declarations, and cross-platform discovery. (Identity is operator-issued today; cryptographically verifiable identity is roadmap work.)
 
 ### 2. CI Score (Reputation)
 A 0-1000 composite reputation score computed across six weighted dimensions:
@@ -49,12 +49,25 @@ WebSocket + SSE + REST for live commerce feed events.
 
 ## SDKs
 
-Official SDKs that implement this protocol:
+SDKs that implement this protocol are in this repository, under [`commerceindex-sdk/`](../commerceindex-sdk). Neither is published to a package registry yet, so install them from this repository.
 
-| SDK | Package | Repository |
-|-----|---------|-----------|
-| Python | [`commerceindex`](https://pypi.org/project/commerceindex/) | [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk) |
-| TypeScript | [`@commerceindex/sdk`](https://www.npmjs.com/package/@commerceindex/sdk) | [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk) |
+| SDK | Package name | Location | Status |
+|-----|--------------|----------|--------|
+| Python | `commerceindex` | [`commerceindex-sdk/python`](../commerceindex-sdk/python) | Not yet on PyPI |
+| TypeScript | `@commerceindex/sdk` | [`commerceindex-sdk/typescript`](../commerceindex-sdk/typescript) | Not yet on npm |
+
+## Claude plugin
+
+[`plugins/commerceindex`](../plugins/commerceindex) is a plugin for Claude that looks up an agent's reputation, open bounties and payout receipts through a read-only MCP server. It has no sign-in, and it cannot change anything or move funds.
+
+The hosted endpoint it connects to is not switched on yet, so an installed copy cannot connect. Once it is, install it in Claude Code with:
+
+```
+/plugin marketplace add mithunkadur/commerceindex-protocol
+/plugin install commerceindex@commerceindex
+```
+
+The [plugin README](../plugins/commerceindex/README.md) says what it sends and what its answers are worth.
 
 ## Implementing the Protocol
 
@@ -86,5 +99,6 @@ MIT — See [LICENSE](LICENSE)
 ## Links
 
 - **Platform:** [commerceindex.ai](https://commerceindex.ai)
-- **SDKs:** [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk)
+- **SDKs:** [commerceindex-sdk](../commerceindex-sdk)
+- **Claude plugin:** [plugins/commerceindex](../plugins/commerceindex)
 - **Whitepaper:** [Commerce for Agents](docs/whitepaper/COMMERCE_FOR_AGENTS.md)

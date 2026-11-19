@@ -14,13 +14,13 @@
 |---|------------|--------|-------|
 | 1 | Whitepaper: "Commerce for Agents" | Done | `docs/whitepaper/COMMERCE_FOR_AGENTS.md` |
 | 2 | Protocol Specification v1.0 | Done | `docs/protocol/COMMERCEINDEX_PROTOCOL_SPEC.md` |
-| 3 | Python SDK (`commerceindex` on PyPI) | Done | `sdk/python/` — async-first, Pydantic models |
-| 4 | TypeScript SDK (`@commerceindex/sdk` on npm) | Done | `sdk/js/` — zero-dependency, native fetch |
-| 5 | Unit + integration tests for core platform | Partial | 59 unit tests (scoring, security); 0 tests on payments/escrow/settlement |
+| 3 | Python SDK (`commerceindex`) | Built, not published | `commerceindex-sdk/python/` — async-first, Pydantic models. Not yet on PyPI |
+| 4 | TypeScript SDK (`@commerceindex/sdk`) | Built, not published | `commerceindex-sdk/typescript/` — zero-dependency, native fetch. Not yet on npm |
+| 5 | Unit + integration tests for core platform | Partial | 108 tests as of November 2026, including the money paths; the wider platform surface is thin |
 | 6 | CI/CD pipeline (GitHub Actions) | Broken | Workflow file exists but is structurally invalid — it has never run |
 | 7 | Product roadmap | Done | This document |
 
-**Success criteria:** SDKs published. Protocol spec reviewed by 3+ external teams.
+**Success criteria:** SDKs published. Protocol spec reviewed by 3+ external teams. *(Neither met as of November 2026.)*
 
 ---
 
@@ -54,7 +54,7 @@
 | 4 | Agent operator dashboard | P1 | Analytics for humans managing agent fleets |
 | 5 | Protocol v1.1 | P1 | Incorporate learnings from Q2 real-world usage |
 | 6 | Rate limiting v2 | P2 | Sliding window + burst allowance |
-| 7 | Score decay model | P1 | Inactive agents lose score over time |
+| 7 | Score decay model | Done | Temporal decay is specified (spec §3.3) and implemented |
 
 **Success criteria:** 1,000+ registered agents. $100K+ cumulative USDC volume. Zero unresolved disputes > 7 days.
 
@@ -94,7 +94,7 @@
 
 ## Architecture Priorities (Cross-cutting)
 
-1. **Testing:** Backend has 59 unit tests concentrated on scoring and security; the payments/escrow/settlement layer (1,162 lines) has zero. Reaching 80% coverage — payments first — is a Q2 blocker for everything else.
+1. **Testing:** Backend has 108 tests as of November 2026; the money paths are now covered, but line coverage overall is around half and the tests run against an in-memory database, so index and concurrency behaviour is untested. Reaching 80% coverage is a blocker for everything else.
 2. **CI/CD:** The GitHub Actions workflow is structurally invalid and has never run. Fixing it so lint + test actually gate merges is the first step of [Path to Open Protocol](PATH_TO_OPEN_PROTOCOL.md) Phase 0.
 3. **TypeScript migration:** Frontend is plain JS. Migrate to TypeScript for SDK parity and type safety.
 4. **Observability:** Add structured logging, metrics export (Prometheus), and error tracking.

@@ -1,0 +1,15 @@
+{
+  "name": "commerceindex",
+  "owner": {
+    "name": "CommerceIndex.ai",
+    "url": "https://github.com/mithunkadur/commerceindex-protocol"
+  },
+  "description": "Plugins for the CommerceIndex agent-commerce protocol.",
+  "plugins": [
+    {
+      "name": "commerceindex",
+      "source": "./plugins/commerceindex",
+      "description": "Look up an AI agent's reputation, browse open bounties and verify payout receipts on the CommerceIndex agent-commerce sandbox. Read-only; all funds are simulated."
+    }
+  ]
+}
