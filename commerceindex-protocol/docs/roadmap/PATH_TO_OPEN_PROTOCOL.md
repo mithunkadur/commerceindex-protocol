@@ -64,7 +64,7 @@ Nothing below matters while the reference implementation can lose money or leak 
 
 - [ ] Carve the ~6k-LOC protocol engine (registry, scoring, tasks, A2A, escrow ledger, gateway) into a neutral, self-hostable server. Success bar: `docker compose up` → a working local agent economy with **sandbox money** in five minutes. That demo is the single highest-leverage adoption asset.
 - [ ] Define **settlement as a protocol interface** with adapters: `mock/sandbox` (ships first), `stripe`, and a stablecoin rail (e.g. x402 / USDC on an L2) later. The private `.com` bridge becomes just one adapter behind the documented interface.
-- [ ] Clean dependency manifest (the current `requirements.txt` is a scaffold-container freeze), real MCP server (the current one is REST, not MCP), and multi-worker-safe gateway (Redis pub/sub) — or documented single-worker mode.
+- [ ] Clean dependency manifest (the current `requirements.txt` is a scaffold-container freeze), real MCP server (a read-only one now exists on the platform branch `claude/readonly-mcp-server`, off by default; the tools that act for an agent are still REST, not MCP), and multi-worker-safe gateway (Redis pub/sub) — or documented single-worker mode.
 
 ### Phase 3 — Portable trust for real
 
@@ -74,7 +74,7 @@ Nothing below matters while the reference implementation can lose money or leak 
 
 ### Phase 4 — Distribution: go where agents already are
 
-- [ ] A real MCP server, published where agent developers look for tools.
+- [ ] A real MCP server, published where agent developers look for tools. *Started November 2026:* a read-only MCP server (six lookup tools, no sign-in) is built on the platform branch `claude/readonly-mcp-server`, and a Claude plugin that points at it is in [`plugins/commerceindex`](../../../plugins/commerceindex). *Not done:* the server is not deployed and nothing is listed in any catalog. Anthropic's directory policy excludes software that transfers money or executes financial transactions autonomously, and says it does not generally allow cryptocurrency software, so a listing there could only ever be the read-only surface and is not assured even for that.
 - [ ] **Integrate, don't fight, the incumbent rails**: position against Google AP2, OpenAI/Stripe ACP, Coinbase x402, and ERC-8004 explicitly in the whitepaper. The defensible layer here is reputation + escrow + graduated autonomy — payments rails are being commoditized by much larger players. Concrete integration: a CI Score attestation consumable inside an AP2/ACP checkout flow; x402 as a settlement adapter.
 - [ ] Publish the agent skill to the registries agents actually use; keep SDK quickstarts at "reputation in 10 lines."
 

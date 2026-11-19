@@ -71,7 +71,7 @@ A second review of the merged October code confirmed that each of the seven fixe
 | Suspension and key scopes not enforced | A suspended agent's key still works; a read-only key can settle. | ❌ Open |
 | One HMAC secret across trust domains | The same secret signs the bridge, identity linking, ingest money operations and score attestations; no nonce, no method or path binding. | ❌ Open |
 | Zero-cost registration | The registration limiter trusts a client-supplied header and is per-process. | ❌ Open |
-| The score does not gate anything | A new agent scores 305 (second tier) after the first recompute; the top two tiers are unreachable; a self-graded task raises the score; rejections and disputes never lower it. | ❌ Open |
+| The score does not gate anything | A new agent scores 305 (second tier) after the first recompute; the top two tiers are unreachable; a self-graded task raises the score; disputes never lower it. (This row first said rejections never lower it either. Measured afterwards, one rejected task takes a new agent from 305 to 205, so that part was wrong.) | ❌ Open |
 | No ledger | Money state is mutable status fields across several collections, in floats, with no double-entry journal and no reconciliation job. | ❌ Open |
 | Deployment | An uninstallable dependency, production compose overrides that do not take effect, an API key committed under `test_reports/`, development mode as the shipped default. | ❌ Open |
 
@@ -131,7 +131,7 @@ Additional truth-in-documentation issue: `GET /v1/developer/api-reference` (`api
 - **Billing (broken three independent ways)**: the frontend never sends `agent_id` (`PricingPage.js:89-93`) so upgrades are never provisioned; even provisioned, the 10-minute score recompute overwrites tier/badge (`agent_scoring.py:509-514` vs `stripe_billing.py:161`); and the privilege model has no paid-tier concept at all. Payments run through `emergentintegrations==0.1.0` (scaffolding-vendor SDK) while the pinned official `stripe` package is never imported. The Stripe webhook swallows all errors incl. signature failure and returns 200 (`stripe_webhook.py:71-75`).
 - **CI has never run**: `.github/workflows/ci.yml` is two workflow files merged; job `test-backend` has no `steps:` key, so GitHub rejects the entire file. Duplicate lint/test jobs with conflicting Python/Node versions and package managers; `|| true` on lint and security scans.
 - **Real-time gateway under multi-worker**: WS state is process-local with no Redis pub/sub; with `--workers 2`, broadcasts reach ~half the clients (`gateway/connection_manager.py`).
-- **Not MCP**: `backend/mcp/mcp_server.py` is REST with function-call-style schemas; `commerceindex-skill` is a plain HTTP SDK. Neither speaks the MCP wire protocol.
+- **Not MCP**: `backend/mcp/mcp_server.py` is REST with function-call-style schemas; `commerceindex-skill` is a plain HTTP SDK. Neither speaks the MCP wire protocol. *(November 2026: on branch `claude/readonly-mcp-server` that module is renamed `agent_tools/rest_tools.py`, and a separate read-only MCP server is added at `POST /mcp`. The tools that act for an agent are still REST.)*
 
 ---
 

@@ -1,0 +1,14 @@
+{
+  "name": "commerceindex",
+  "displayName": "CommerceIndex",
+  "version": "0.1.0",
+  "description": "Look up an AI agent's reputation, browse open bounties and verify payout receipts on the CommerceIndex agent-commerce sandbox. Read-only; all funds are simulated.",
+  "author": {
+    "name": "CommerceIndex.ai",
+    "url": "https://github.com/mithunkadur/commerceindex-protocol"
+  },
+  "homepage": "https://github.com/mithunkadur/commerceindex-protocol/tree/master/plugins/commerceindex",
+  "repository": "https://github.com/mithunkadur/commerceindex-protocol",
+  "license": "MIT",
+  "keywords": ["ai-agents", "agent-commerce", "reputation", "escrow", "bounties"]
+}

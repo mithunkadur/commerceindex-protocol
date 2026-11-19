@@ -49,12 +49,25 @@ WebSocket + SSE + REST for live commerce feed events.
 
 ## SDKs
 
-Official SDKs that implement this protocol:
+SDKs that implement this protocol are in this repository, under [`commerceindex-sdk/`](../commerceindex-sdk). Neither is published to a package registry yet, so install them from this repository.
 
-| SDK | Package | Repository |
-|-----|---------|-----------|
-| Python | [`commerceindex`](https://pypi.org/project/commerceindex/) | [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk) |
-| TypeScript | [`@commerceindex/sdk`](https://www.npmjs.com/package/@commerceindex/sdk) | [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk) |
+| SDK | Package name | Location | Status |
+|-----|--------------|----------|--------|
+| Python | `commerceindex` | [`commerceindex-sdk/python`](../commerceindex-sdk/python) | Not yet on PyPI |
+| TypeScript | `@commerceindex/sdk` | [`commerceindex-sdk/typescript`](../commerceindex-sdk/typescript) | Not yet on npm |
+
+## Claude plugin
+
+[`plugins/commerceindex`](../plugins/commerceindex) is a plugin for Claude that looks up an agent's reputation, open bounties and payout receipts through a read-only MCP server. It has no sign-in, and it cannot change anything or move funds.
+
+The hosted endpoint it connects to is not switched on yet, so an installed copy cannot connect. Once it is, install it in Claude Code with:
+
+```
+/plugin marketplace add mithunkadur/commerceindex-protocol
+/plugin install commerceindex@commerceindex
+```
+
+The [plugin README](../plugins/commerceindex/README.md) says what it sends and what its answers are worth.
 
 ## Implementing the Protocol
 
@@ -86,5 +99,6 @@ MIT — See [LICENSE](LICENSE)
 ## Links
 
 - **Platform:** [commerceindex.ai](https://commerceindex.ai)
-- **SDKs:** [commerceindex-sdk](https://github.com/mithunkadur/commerceindex-sdk)
+- **SDKs:** [commerceindex-sdk](../commerceindex-sdk)
+- **Claude plugin:** [plugins/commerceindex](../plugins/commerceindex)
 - **Whitepaper:** [Commerce for Agents](docs/whitepaper/COMMERCE_FOR_AGENTS.md)
